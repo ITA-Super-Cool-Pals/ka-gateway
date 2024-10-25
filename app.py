@@ -7,7 +7,7 @@ app = Flask(__name__)
 # Routes for Rooms Service
 @app.route('/rooms')
 def get_rooms():
-    room_url = f'http://ka-rooms:5001'
+    room_url = f'http://ka-rooms:5000/rooms'
     response = requests.get(room_url)
     return jsonify(response.json())
 
