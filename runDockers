@@ -1,0 +1,135 @@
+#!/bin/bash
+
+# Main menu function
+main_menu() {
+    echo "Select an option and press [ENTER] to confirm:"
+    echo "[1] Create Docker network for the microservices"
+    echo "[2] Build Docker images"
+    echo "[3] Run Docker containers"
+    echo "[4] Stop Docker containers"
+    echo "[0] Exit"
+
+    # Read user input
+    read -p "Enter your choice: " choice
+
+    case $choice in
+        1)
+            create_network
+            ;;
+        2)
+            build_docker_images
+            ;;
+        3)
+            run_docker_containers
+            ;;
+        4)
+            stop_docker_containers
+            ;;
+        0)
+            echo "Exiting..."
+            exit 0
+            ;;
+        *)
+            echo "Invalid choice"
+            main_menu
+            ;;
+    esac
+}
+
+# Create network function
+create_network() {
+    echo "Creating network..."
+    docker network create ka-network
+
+    main_menu
+}
+
+# Build Docker images function
+build_docker_images() {
+    echo "Building Reviews service..."
+    docker build -t ka-reviews https://github.com/ITA-Super-Cool-Pals/ka-reviews.git#main
+
+    echo "Building Guests service..."
+    docker build -t ka-guests https://github.com/ITA-Super-Cool-Pals/ka-guest.git#main
+
+    echo "Building Occupancy service..."
+    docker build -t ka-occupancy https://github.com/ITA-Super-Cool-Pals/ka-occupancy.git#main
+
+    echo "Building Rooms service..."
+    docker build -t ka-rooms https://github.com/ITA-Super-Cool-Pals/ka-rooms.git#main
+
+    echo "Building Bar Sales service..."
+    docker build -t ka-bar-sales https://github.com/ITA-Super-Cool-Pals/ka-bar-sales.git#main
+
+    echo "Building Booking service..."
+    docker build -t ka-booking https://github.com/ITA-Super-Cool-Pals/ka-booking.git#main
+
+    echo "Building Gateway..."
+    docker build -t ka-gateway https://github.com/ITA-Super-Cool-Pals/ka-gateway.git#main
+
+    main_menu
+}
+
+# Run Docker containers function
+run_docker_containers() {
+    # Primpt user for path to use in volume flag
+    default_path="./app-db"
+
+    echo "Enter the host path you wish to mount to /app/app-db in the container."
+    echo "For example: C:/myDirectory/data | /home/kingarthur/data"
+    echo "Leave empty and press [ENTER] to use default path: $default_path"
+    read -p "Enter host path: " user_path
+
+    user_path=${user_path:-$default_path}
+
+    echo "Running Reviews service..."
+    docker run --rm -d -p 5003:5000 --name ka-reviews --network ka-network -v "$user_path:/app/app-db" ka-reviews
+
+    echo "Running Guests service..."
+    docker run --rm -d -p 5002:5000 --name ka-guests --network ka-network -v "$user_path:/app/app-db" ka-guests
+
+    echo "Running Occupancy service..."
+    docker run --rm -d -p 5005:5000 --name ka-occupancy --network ka-network -v "$user_path:/app/app-db" ka-occupancy
+
+    echo "Running Rooms service..."
+    docker run --rm -d -p 5001:5000 --name ka-rooms --network ka-network -v "$user_path:/app/app-db" ka-rooms
+
+    echo "Running Bar Sales service..."
+    docker run --rm -d -p 5008:5000 --name ka-bar-sales --network ka-network -v "$user_path:/app/app-db" ka-bar-sales
+
+    echo "Running Booking service..."
+    docker run --rm -d -p 5010:5000 --name ka-booking --network ka-network -v "$user_path:/app/app-db" ka-booking
+
+    echo "Running Gateway..."
+    docker run --rm -d -p 5000:5000 --name ka-gateway --network ka-network ka-gateway
+
+    main_menu
+}
+
+stop_docker_containers() {
+    echo "Stopping Reviews service..."
+    docker stop ka-reviews
+
+    echo "Stopping Guests service..."
+    docker stop ka-guests
+
+    echo "Stopping Occupancy service..."
+    docker stop ka-occupancy
+
+    echo "Stopping Rooms service..."
+    docker stop ka-rooms
+
+    echo "Stopping Bar Sales service..."
+    docker stop ka-bar-sales
+
+    echo "Stopping Booking service..."
+    docker stop ka-booking
+
+    echo "Stopping Gateway..."
+    docker stop ka-gateway
+
+    main_menu
+}
+
+# Start script by displaying main menu
+main_menu
