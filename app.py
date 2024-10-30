@@ -35,9 +35,15 @@ def get_reviews_single(id):
 def create_review():
     review_url = 'http://ka-reviews:5000/reviews'
     review_data = request.get_json()
-    review = requests.post(url = review_url, json = review_data)
-    #response = requests.get(url = review_url, json = review_data)
-    return jsonify(review.json())
+
+    # Send POST request to ka-reviews service
+    review_response = requests.post(url=review_url, json=review_data)
+
+    # Check status code of the response from ka-reviews
+    if review_response.status_code == 201:
+        return jsonify(review_response.json()), 201
+    else:
+        return jsonify(review_response.json()), review_response.status_code
 
 @app.route('/reviews/csv')
 def get_reviews_csv():
