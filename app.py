@@ -25,6 +25,19 @@ def get_reviews():
     response = requests.get(review_url)
     return jsonify(response.json())
 
+@app.route('/reviews/<int:id>')
+def get_reviews_single(id):
+    review_url = f'http://ka-reviews:5000/{id}'
+    response = requests.get(review_url)
+    return jsonify(response.json())
+
+@app.route('/reviews', methods=['POST'])
+def create_review():
+    review_url = 'http://ka-reviews:5000'
+    review_data = request.get_json()
+    response = requests.get(url = review_url, json = review_data)
+    return jsonify(response.json())
+
 @app.route('/reviews/csv')
 def get_reviews_csv():
     review_url = 'http://ka-reviews:5000/reviews'
