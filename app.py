@@ -27,13 +27,13 @@ def get_reviews():
 
 @app.route('/reviews/<int:id>')
 def get_reviews_single(id):
-    review_url = f'http://ka-reviews:5000/{id}'
+    review_url = f'http://ka-reviews:5000/reviews/{id}'
     response = requests.get(review_url)
     return jsonify(response.json())
 
 @app.route('/reviews', methods=['POST'])
 def create_review():
-    review_url = 'http://ka-reviews:5000'
+    review_url = 'http://ka-reviews:5000/reviews'
     review_data = request.get_json()
     response = requests.get(url = review_url, json = review_data)
     return jsonify(response.json())
