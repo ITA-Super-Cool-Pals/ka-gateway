@@ -72,15 +72,14 @@ build_docker_images() {
 
 # Run Docker containers function
 run_docker_containers() {
-    # Primpt user for path to use in volume flag
-    default_path="./app-db"
-
     echo "Enter the host path you wish to mount to /app/app-db in the container."
     echo "For example: C:/myDirectory/data | /home/kingarthur/data"
-    echo "Leave empty and press [ENTER] to use default path: $default_path"
     read -p "Enter host path: " user_path
 
-    user_path=${user_path:-$default_path}
+    if [[ -z "$user_path" ]]; then
+        echo "Error: You must enter a valid path."
+        return
+    fi
 
     echo "Running Reviews service..."
     docker run --rm -d -p 5003:5000 --name ka-reviews --network ka-network -v "$user_path:/app/app-db" ka-reviews
