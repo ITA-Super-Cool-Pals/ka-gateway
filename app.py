@@ -44,6 +44,8 @@ def create_review():
     # Check status code of the response from ka-reviews
     if review_response.status_code == 201:
         return jsonify(review_response.json()), 201
+    elif review_response.status_code == 500:
+        return jsonify({"error": "server error"}), 500
     else:
         return jsonify(review_response.json()), review_response.status_code
 
@@ -78,9 +80,11 @@ def create_booking():
 
     # Check status code of response from ka-bookings
     if bookings_response.status_code == 201:
-        return jsonify({"message:": "booking created"}), 201
+        return jsonify(bookings_response.json()), 201
+    elif bookings_response.status_code == 500:
+        return jsonify({"error": "server error"}), 500
     else:
-        return jsonify({"error": "server error"}), bookings_response.status_code
+        return jsonify(bookings_response.json()), bookings_response.status_code
 
 @app.route('/bookings/csv')
 def get_bookings_csv():
@@ -113,9 +117,11 @@ def create_guest():
 
     # Check status code of response from ka-guests
     if guests_response.status_code == 201:
-        return jsonify({"message": "guest created"}), 201
+        return jsonify(guests_response.json()), 201
+    elif guests_response.status_code == 500:
+        return jsonify({"error": "server error"}), 500
     else:
-        return jsonify({"error": "server error"}), guests_response.status_code
+        return jsonify(guests_response.json()), guests_response.status_code
 
 @app.route('/guests/csv')
 def get_guests_csv():
