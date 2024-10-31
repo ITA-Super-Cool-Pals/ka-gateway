@@ -134,16 +134,49 @@ def get_guests_csv():
 # Occupancy routes
 @app.route('/occupancy')
 def get_occupancy():
-    occupancy_url = 'http://ka-occupancy:5000/occupancy'
+    occupancy_url = 'http://ka-occupancy:5000/occupancy/rooms'
     response = requests.get(occupancy_url)
     return jsonify(response.json())
 
 @app.route('/occupancy/csv')
 def get_occupancy_csv():
-    occupancy_url = 'http://ka-occupancy:5000/occupancy'
+    occupancy_url = 'http://ka-occupancy:5000/occupancy/rooms'
     response = requests.get(occupancy_url)
     json_data = response.json()
     return app_csv_convert.convert_json_to_csv(json_data, filename="occupancy.csv")
+
+@app.route('/occupancy', methods=['POST'])
+def create_occupancy():
+    occupancy_url = 'http://ka-occupancy:5000/occupancy/rooms'
+    occupancy_data = request.get_json()
+
+    # Send POST request to ka-occupancy service
+    occupancy_response = requests.post(url=occupancy_url, json=occupancy_data)
+
+    # Check status code of response from ka-occupancy
+    if occupancy_response.status_code == 201:
+        return jsonify(occupancy_response.json()), 201
+    elif occupancy_response.status_code == 500:
+        return jsonify({"error": "server error"}), 500
+    else:
+        return jsonify(occupancy_response.json()), occupancy_response.status_code
+
+@app.route('/occupancy/<int:id>', methods=['PATCH'])
+def update_occupancy(id):
+    occupancy_url = f'http://ka-occupancy:5000/occupancy/rooms/{id}'
+    occupancy_data = request.get_json()
+
+    # Send PATCH request to ka-occupancy service
+    occupancy_response = requests.patch(url=occupancy_url, json=occupancy_data)
+
+    # Check status code of response from ka-occupancy
+    if occupancy_response.status_code == 200:
+        return jsonify(occupancy_response.json()), 200
+    elif occupancy_response.status_code == 500:
+        return jsonify({"error": "server error"}), 500
+    else:
+        return jsonify(occupancy_response.json()), occupancy_response.status_code
+
 
 
 # Bar sales routes
