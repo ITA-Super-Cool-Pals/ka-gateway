@@ -43,9 +43,9 @@ def create_review():
 
     # Check status code of the response from ka-reviews
     if review_response.status_code == 201:
-        return jsonify({"message": "review posted"}), 201
+        return jsonify(review_response.json()), 201
     else:
-        return jsonify({"error": "server error"}), review_response.status_code
+        return jsonify(review_response.json()), review_response.status_code
 
 @app.route('/reviews/csv')
 def get_reviews_csv():
@@ -53,6 +53,7 @@ def get_reviews_csv():
     response = requests.get(review_url)
     json_data = response.json()
     return app_csv_convert.convert_json_to_csv(json_data, filename="reviews.csv")
+
 
 # Booking routes
 @app.route('/bookings')
@@ -77,7 +78,7 @@ def create_booking():
 
     # Check status code of response from ka-bookings
     if bookings_response.status_code == 201:
-        return jsonify({"message:" "booking created"}), 201
+        return jsonify({"message:": "booking created"}), 201
     else:
         return jsonify({"error": "server error"}), bookings_response.status_code
 

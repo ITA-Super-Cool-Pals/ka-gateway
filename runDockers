@@ -71,7 +71,7 @@ build_docker_images() {
     docker build -t ka-bar-sales https://github.com/ITA-Super-Cool-Pals/ka-bar-sales.git#main
 
     echo -e "${YELLOW}Building Booking service...${COLOR_OFF}"
-    docker build -t ka-booking https://github.com/ITA-Super-Cool-Pals/ka-booking.git#main
+    docker build -t ka-bookings https://github.com/ITA-Super-Cool-Pals/ka-booking.git#main
 
     echo -e "${YELLOW}Building Gateway...${COLOR_OFF}"
     docker build -t ka-gateway https://github.com/ITA-Super-Cool-Pals/ka-gateway.git#main
@@ -106,7 +106,7 @@ run_docker_containers() {
     docker run --rm -d -p 5008:5000 --name ka-bar-sales --network ka-network -v "$user_path:/app/app-db" ka-bar-sales
 
     echo -e "${YELLOW}Running Booking service...${COLOR_OFF}"
-    docker run --rm -d -p 5010:5000 --name ka-booking --network ka-network -v "$user_path:/app/app-db" ka-booking
+    docker run --rm -d -p 5010:5000 --name ka-bookings --network ka-network -v "$user_path:/app/app-db" ka-bookings
 
     echo -e "${YELLOW}Running Gateway...${COLOR_OFF}"
     docker run --rm -d -p 5000:5000 --name ka-gateway --network ka-network ka-gateway
@@ -131,7 +131,7 @@ stop_docker_containers() {
     docker stop ka-bar-sales
 
     echo -e "${YELLOW}Stopping Booking service...${COLOR_OFF}"
-    docker stop ka-booking
+    docker stop ka-bookings
 
     echo -e "${YELLOW}Stopping Gateway...${COLOR_OFF}"
     docker stop ka-gateway
