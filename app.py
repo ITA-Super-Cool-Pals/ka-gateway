@@ -41,9 +41,9 @@ def create_review():
 
     # Check status code of the response from ka-reviews
     if review_response.status_code == 201:
-        return jsonify(review_response.json()), 201
+        return jsonify({"message": "review posted"}), 201
     else:
-        return jsonify(review_response.json()), review_response.status_code
+        return jsonify({"error": "server error"}), review_response.status_code
 
 @app.route('/reviews/csv')
 def get_reviews_csv():

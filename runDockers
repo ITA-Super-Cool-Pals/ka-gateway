@@ -1,13 +1,22 @@
 #!/bin/bash
 
+# Colors
+COLOR_OFF='\033[0m'
+BLUE='\033[1;34m'
+RED='\033[1;31m'
+ORANGE='\033[0;33m'
+YELLOW='\033[1;33m'
+CYAN='\033[1;36m'
+GREEN='\033[1;32m'
+
 # Main menu function
 main_menu() {
-    echo "Select an option and press [ENTER] to confirm:"
-    echo "[1] Create Docker network for the microservices"
-    echo "[2] Build Docker images"
-    echo "[3] Run Docker containers"
-    echo "[4] Stop Docker containers"
-    echo "[0] Exit"
+    echo -e "${BLUE}Select an option and press ${GREEN}[ENTER]${BLUE} to confirm:${COLOR_OFF}"
+    echo -e "${GREEN}[1] ${BLUE}Create Docker network for the microservices${COLOR_OFF}"
+    echo -e "${GREEN}[2] ${BLUE}Build Docker images${COLOR_OFF}"
+    echo -e "${GREEN}[3] ${BLUE}Run Docker containers${COLOR_OFF}"
+    echo -e "${GREEN}[4] ${BLUE}Stop Docker containers${COLOR_OFF}"
+    echo -e "${GREEN}[0] ${BLUE}Exit${COLOR_OFF}"
 
     # Read user input
     read -p "Enter your choice: " choice
@@ -26,11 +35,11 @@ main_menu() {
             stop_docker_containers
             ;;
         0)
-            echo "Exiting..."
+            echo -e "${YELLOW}Exiting...${COLOR_OFF}"
             exit 0
             ;;
         *)
-            echo "Invalid choice"
+            echo -e "${RED}Invalid choice${COLOR_OFF}"
             main_menu
             ;;
     esac
@@ -38,7 +47,7 @@ main_menu() {
 
 # Create network function
 create_network() {
-    echo "Creating network..."
+    echo -e "${YELLOW}Creating network...${COLOR_OFF}"
     docker network create ka-network
 
     main_menu
@@ -46,25 +55,25 @@ create_network() {
 
 # Build Docker images function
 build_docker_images() {
-    echo "Building Reviews service..."
+    echo -e "${YELLOW}Building Reviews service...${COLOR_OFF}"
     docker build -t ka-reviews https://github.com/ITA-Super-Cool-Pals/ka-reviews.git#main
 
-    echo "Building Guests service..."
+    echo -e "${YELLOW}Building Guests service...${COLOR_OFF}"
     docker build -t ka-guests https://github.com/ITA-Super-Cool-Pals/ka-guest.git#main
 
-    echo "Building Occupancy service..."
+    echo -e "${YELLOW}Building Occupancy service...${COLOR_OFF}"
     docker build -t ka-occupancy https://github.com/ITA-Super-Cool-Pals/ka-occupancy.git#main
 
-    echo "Building Rooms service..."
+    echo -e "${YELLOW}Building Rooms service...${COLOR_OFF}"
     docker build -t ka-rooms https://github.com/ITA-Super-Cool-Pals/ka-rooms.git#main
 
-    echo "Building Bar Sales service..."
+    echo -e "${YELLOW}Building Bar Sales service...${COLOR_OFF}"
     docker build -t ka-bar-sales https://github.com/ITA-Super-Cool-Pals/ka-bar-sales.git#main
 
-    echo "Building Booking service..."
+    echo -e "${YELLOW}Building Booking service...${COLOR_OFF}"
     docker build -t ka-booking https://github.com/ITA-Super-Cool-Pals/ka-booking.git#main
 
-    echo "Building Gateway..."
+    echo -e "${YELLOW}Building Gateway...${COLOR_OFF}"
     docker build -t ka-gateway https://github.com/ITA-Super-Cool-Pals/ka-gateway.git#main
 
     main_menu
@@ -72,59 +81,59 @@ build_docker_images() {
 
 # Run Docker containers function
 run_docker_containers() {
-    echo "Enter the host path you wish to mount to /app/app-db in the container."
-    echo "For example: C:/myDirectory/data | /home/kingarthur/data"
+    echo -e "${BLUE}Enter the host path you wish to mount to ${CYAN}/app/app-db${BLUE} in the container.${COLOR_OFF}"
+    echo -e "${BLUE}Examples: ${CYAN}C:/myDirectory/data${BLUE} | ${CYAN}/home/kingarthur/data${COLOR_OFF}"
     read -p "Enter host path: " user_path
 
     if [[ -z "$user_path" ]]; then
-        echo "Error: You must enter a valid path."
+        echo -e "${RED}Error: You must enter a valid path.${COLOR_OFF}"
         return
     fi
 
-    echo "Running Reviews service..."
+    echo -e "${YELLOW}Running Reviews service...${COLOR_OFF}"
     docker run --rm -d -p 5003:5000 --name ka-reviews --network ka-network -v "$user_path:/app/app-db" ka-reviews
 
-    echo "Running Guests service..."
+    echo -e "${YELLOW}Running Guests service...${COLOR_OFF}"
     docker run --rm -d -p 5002:5000 --name ka-guests --network ka-network -v "$user_path:/app/app-db" ka-guests
 
-    echo "Running Occupancy service..."
+    echo -e "${YELLOW}Running Occupancy service...${COLOR_OFF}"
     docker run --rm -d -p 5005:5000 --name ka-occupancy --network ka-network -v "$user_path:/app/app-db" ka-occupancy
 
-    echo "Running Rooms service..."
+    echo -e "${YELLOW}Running Rooms service...${COLOR_OFF}"
     docker run --rm -d -p 5001:5000 --name ka-rooms --network ka-network -v "$user_path:/app/app-db" ka-rooms
 
-    echo "Running Bar Sales service..."
+    echo -e "${YELLOW}Running Bar Sales service...${COLOR_OFF}"
     docker run --rm -d -p 5008:5000 --name ka-bar-sales --network ka-network -v "$user_path:/app/app-db" ka-bar-sales
 
-    echo "Running Booking service..."
+    echo -e "${YELLOW}Running Booking service...${COLOR_OFF}"
     docker run --rm -d -p 5010:5000 --name ka-booking --network ka-network -v "$user_path:/app/app-db" ka-booking
 
-    echo "Running Gateway..."
+    echo -e "${YELLOW}Running Gateway...${COLOR_OFF}"
     docker run --rm -d -p 5000:5000 --name ka-gateway --network ka-network ka-gateway
 
     main_menu
 }
 
 stop_docker_containers() {
-    echo "Stopping Reviews service..."
+    echo -e "${YELLOW}Stopping Reviews service...${COLOR_OFF}"
     docker stop ka-reviews
 
-    echo "Stopping Guests service..."
+    echo -e "${YELLOW}Stopping Guests service...${COLOR_OFF}"
     docker stop ka-guests
 
-    echo "Stopping Occupancy service..."
+    echo -e "${YELLOW}Stopping Occupancy service...${COLOR_OFF}"
     docker stop ka-occupancy
 
-    echo "Stopping Rooms service..."
+    echo -e "${YELLOW}Stopping Rooms service...${COLOR_OFF}"
     docker stop ka-rooms
 
-    echo "Stopping Bar Sales service..."
+    echo -e "${YELLOW}Stopping Bar Sales service...${COLOR_OFF}"
     docker stop ka-bar-sales
 
-    echo "Stopping Booking service..."
+    echo -e "${YELLOW}Stopping Booking service...${COLOR_OFF}"
     docker stop ka-booking
 
-    echo "Stopping Gateway..."
+    echo -e "${YELLOW}Stopping Gateway...${COLOR_OFF}"
     docker stop ka-gateway
 
     main_menu
