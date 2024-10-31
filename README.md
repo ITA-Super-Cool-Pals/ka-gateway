@@ -161,17 +161,44 @@ bash ka-docker-setup
   - **400:** Missing required data
   - **500:** Error creating guest
 ---
-### Get list of occupancy data
+### Get list of occupied rooms
 - URL: `/occupancy`
 - Method: `GET`
 - Response:
   - **200:** List occupancy data
 
-### Get list of occupancy data in CSV format
+### Get list of occupied rooms data in CSV format
 - URL: `/occupancy/csv`
 - Method: `GET`
 - Response:
   - **200:** List occupancy data as csv
+
+### Create new occupancy
+- URL: `/occupancy`
+- Method: `POST`
+- Request Body:
+  ```
+  {
+    "BookingId": <booking_id>,
+    "RoomId": <room_id>,
+    "GuestId": <guest_id>,
+    "CheckIn": <date_format yyyy-mm-dd>
+  }
+  ```
+- Response:
+  - **201:** Occupancy created
+
+### Update existing occupancy
+- URL: `/occupancy/{id}`
+- Method: `PATCH`
+- Request Body:
+  ```
+  {
+    "CheckOut": <date_format yyyy-mm-dd>
+  }
+  ```
+- Response:
+  - **201:** Occupancy updated
 ---
 ### Get list of bar sales data
 - URL: `/barsales`

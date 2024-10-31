@@ -147,7 +147,7 @@ def get_occupancy_csv():
 
 @app.route('/occupancy', methods=['POST'])
 def create_occupancy():
-    occupancy_url = 'http://ka-occupancy:5000/occupancy/rooms'
+    occupancy_url = 'http://ka-occupancy:5000/occupancy'
     occupancy_data = request.get_json()
 
     # Send POST request to ka-occupancy service
@@ -163,7 +163,7 @@ def create_occupancy():
 
 @app.route('/occupancy/<int:id>', methods=['PATCH'])
 def update_occupancy(id):
-    occupancy_url = f'http://ka-occupancy:5000/occupancy/rooms/{id}'
+    occupancy_url = f'http://ka-occupancy:5000/occupancy/{id}'
     occupancy_data = request.get_json()
 
     # Send PATCH request to ka-occupancy service
