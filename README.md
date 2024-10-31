@@ -10,7 +10,7 @@ docker build -t ka-gateway https://github.com/ITA-Super-Cool-Pals/ka-gateway.git
 
 2. Run the docker image:
 ```
-docker run --rm -d -p 5000:5000 --name ka-gatewya --network ka-network ka-gateway
+docker run --rm -d -p 5000:5000 --name ka-gateway --network ka-network ka-gateway
 ```
 
 ## Alternative quick setup for all microservices
