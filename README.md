@@ -27,9 +27,9 @@ git clone https://github.com/ITA-Super-Cool-Pals/ka-gateway.git
 cd ka-gateway
 ```
 
-3. Run the `docker-setup` script using bash:
+3. Run the `ka-docker-setup` script using bash:
 ```
-bash docker-setup
+bash ka-docker-setup
 ```
 
 4. Follow the on screen prompts:
